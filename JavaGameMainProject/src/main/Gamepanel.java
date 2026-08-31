@@ -20,7 +20,17 @@ public class Gamepanel extends JPanel implements Runnable
 	final int screenWidth = titleSize * maxScreenColum; //  867 Pixel
 	final int screenHeight = titleSize * maxScreenRow; // 586 Pixel
 	
+	// This is FPS section
+	
+	int Fps = 60;
+	
+	KeyHandle KeyH = new KeyHandle();
 	Thread GameThread;
+	
+	//Player default position
+	int playerX = 100;
+	int playerY = 100;
+	int playerSpeed = 4; // 4 means 4 Pixels
 	
 	public Gamepanel() 
 	{
@@ -28,7 +38,8 @@ public class Gamepanel extends JPanel implements Runnable
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight)); //sets the game-screen resolution.
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true); //can make drawing smoother and reduce flickering.
-		
+		this.addKeyListener(KeyH);
+		this.setFocusable(true);
 		
 	}
 	
@@ -43,22 +54,67 @@ public class Gamepanel extends JPanel implements Runnable
 	@Override
 	public void run()
 	{
+		
+		double drawInterval = 1000000000/Fps; // 0.0166666 seconds
+		double nextDrawTime = System.nanoTime() + drawInterval;
 		while(GameThread != null) // not equal to" comparison 
 		{
-			System.out.println("The game loop is running and show in output");
+			//System.out.println("The game loop is running and show in output");
+			
+			/*long currentTime = System.nanoTime();
+			System.out.println("Current Time:"+currentTime);returns the current value of the running
+															Java Virtual Machine's high resolution time source, in nanoseconds.
+													
+													
+															Also, 1Millions nanoseconds equal to 1 seconds!
+															*/
+			
 			
 			//1.I Update: Update info of such as character Position
 			update();
 			//2. Draw: DRAW the screen with the updated info
 			repaint();
 			
+			try {
+				double remainingTime = nextDrawTime - System.nanoTime();
+				remainingTime = remainingTime/1000000;
+				
+				Thread.sleep((long) remainingTime);
+			} catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+			
 		}
 	}
 	public void update() 
 	{
 		
+		/*
+		 * in java the upper left corner is X:0 Y:0
+		 * 
+		 * X value increase to the right
+		 * Y value increase as they go down
+		 * */
+		
+		
+		if(KeyH.upPressed == true)
+		{
+			playerY -= playerSpeed;
+		}
+		else if(KeyH.downPressed == true) {
+			playerY += playerSpeed;
+		}
+		else if(KeyH.leftPressed == true) {
+			playerX += playerSpeed;
+		}
+		else if(KeyH.rightPressed == true) {
+			playerX += playerSpeed;
+		}
+		
+		
 	}
-	public void paintComponent(Graphics gph)
+	public void paintComponent(Graphics gph) 
 	{
 		super.paintComponent(gph);
 		
@@ -66,7 +122,7 @@ public class Gamepanel extends JPanel implements Runnable
 		
 		g2.setColor(Color.white);
 		
-		g2.fillRect(100, 100, titleSize, titleSize);
+		g2.fillRect(playerX, playerY, titleSize, titleSize);
 		
 		g2.dispose();
 	}
