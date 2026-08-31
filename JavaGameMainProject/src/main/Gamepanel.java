@@ -51,43 +51,90 @@ public class Gamepanel extends JPanel implements Runnable
 		
 	}
 
-	@Override
+//	@Override
+//	public void run()
+//	{
+//		
+//		double drawInterval = 1000000000/Fps; // 0.0166666 seconds
+//		double nextDrawTime = System.nanoTime() + drawInterval;
+//		while(GameThread != null) // not equal to" comparison 
+//		{
+//			//System.out.println("The game loop is running and show in output");
+//			
+//			/*long currentTime = System.nanoTime();
+//			System.out.println("Current Time:"+currentTime);returns the current value of the running
+//															Java Virtual Machine's high resolution time source, in nanoseconds.
+//													
+//													
+//															Also, 1Millions nanoseconds equal to 1 seconds!
+//															*/
+//			
+//			
+//			//1.I Update: Update info of such as character Position
+//			update();
+//			//2. Draw: DRAW the screen with the updated info
+//			repaint();
+//			
+//			try {
+//				double remainingTime = nextDrawTime - System.nanoTime();
+//				remainingTime = remainingTime/1000000;
+//				
+//				if(remainingTime < 0) {
+//					remainingTime = 0;
+//				}
+//				
+//				Thread.sleep((long) remainingTime);
+//				
+//				nextDrawTime += drawInterval;
+//			} catch(InterruptedException e)
+//			{
+//				e.printStackTrace();
+//			}
+//			
+//		}
+//	}
+	
 	public void run()
 	{
 		
 		double drawInterval = 1000000000/Fps; // 0.0166666 seconds
-		double nextDrawTime = System.nanoTime() + drawInterval;
-		while(GameThread != null) // not equal to" comparison 
+		double delta = 0;
+		long lastTime = System.nanoTime();
+		long currentTime;
+		long timer = 0;
+		int drawCount = 0;
+		
+		while(GameThread != null) 
 		{
-			//System.out.println("The game loop is running and show in output");
+			currentTime = System.nanoTime();
+			timer += (currentTime - lastTime);
+			delta += (currentTime - lastTime) / drawInterval;
 			
-			/*long currentTime = System.nanoTime();
-			System.out.println("Current Time:"+currentTime);returns the current value of the running
-															Java Virtual Machine's high resolution time source, in nanoseconds.
-													
-													
-															Also, 1Millions nanoseconds equal to 1 seconds!
-															*/
+//			//1.I Update: Update info of such as character Position
+//			update();
+//			//2. Draw: DRAW the screen with the updated info
+//			repaint();
 			
+			lastTime = currentTime;
 			
-			//1.I Update: Update info of such as character Position
-			update();
-			//2. Draw: DRAW the screen with the updated info
-			repaint();
-			
-			try {
-				double remainingTime = nextDrawTime - System.nanoTime();
-				remainingTime = remainingTime/1000000;
-				
-				Thread.sleep((long) remainingTime);
-			} catch(InterruptedException e)
+			if(delta >= 1) 
 			{
-				e.printStackTrace();
+				update();
+				repaint();
+				delta--;
+				drawCount++;
+			}
+			if(timer >= 1000000000) 
+			{
+				System.out.println("Fps:"+" "+drawCount);
+				drawCount = 0;
+				timer = 0;
 			}
 			
 		}
+		
 	}
-	public void update() 
+	public void update()
 	{
 		
 		/*
@@ -106,7 +153,7 @@ public class Gamepanel extends JPanel implements Runnable
 			playerY += playerSpeed;
 		}
 		else if(KeyH.leftPressed == true) {
-			playerX += playerSpeed;
+			playerX -= playerSpeed;
 		}
 		else if(KeyH.rightPressed == true) {
 			playerX += playerSpeed;
