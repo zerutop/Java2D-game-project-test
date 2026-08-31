@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import entity.Player;
+
 public class Gamepanel extends JPanel implements Runnable
 {
 
@@ -14,7 +16,9 @@ public class Gamepanel extends JPanel implements Runnable
 	final int originalTitleSize = 16; // 16*16 title
 	final int scale = 3;
 	
-	final int titleSize = originalTitleSize * scale; // 48*48 title
+	// Do public when you want to access from other package
+	
+	public final int titleSize = originalTitleSize * scale; // 48*48 title
 	final int maxScreenColum = 16; // Width ("You can adjust as you like")
 	final int maxScreenRow = 12; // length ("You can adjust as you like")
 	final int screenWidth = titleSize * maxScreenColum; //  867 Pixel
@@ -26,6 +30,7 @@ public class Gamepanel extends JPanel implements Runnable
 	
 	KeyHandle KeyH = new KeyHandle();
 	Thread GameThread;
+	Player player = new Player(this, KeyH);
 	
 	//Player default position
 	int playerX = 100;
@@ -145,19 +150,21 @@ public class Gamepanel extends JPanel implements Runnable
 		 * */
 		
 		
-		if(KeyH.upPressed == true)
-		{
-			playerY -= playerSpeed;
-		}
-		else if(KeyH.downPressed == true) {
-			playerY += playerSpeed;
-		}
-		else if(KeyH.leftPressed == true) {
-			playerX -= playerSpeed;
-		}
-		else if(KeyH.rightPressed == true) {
-			playerX += playerSpeed;
-		}
+//		if(KeyH.upPressed == true)
+//		{
+//			playerY -= playerSpeed;
+//		}
+//		else if(KeyH.downPressed == true) {
+//			playerY += playerSpeed;
+//		}
+//		else if(KeyH.leftPressed == true) {
+//			playerX -= playerSpeed;
+//		}
+//		else if(KeyH.rightPressed == true) {
+//			playerX += playerSpeed;
+//		}
+		
+		player.update();
 		
 		
 	}
@@ -167,9 +174,11 @@ public class Gamepanel extends JPanel implements Runnable
 		
 		Graphics2D g2 = (Graphics2D)gph;
 		
-		g2.setColor(Color.white);
+//		g2.setColor(Color.white);
+//		
+//		g2.fillRect(playerX, playerY, titleSize, titleSize);
 		
-		g2.fillRect(playerX, playerY, titleSize, titleSize);
+		player.draw(g2);
 		
 		g2.dispose();
 	}
