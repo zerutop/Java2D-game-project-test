@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import entity.Player;
+import titles.TileManager;
 
 public class Gamepanel extends JPanel implements Runnable
 {
@@ -19,23 +20,25 @@ public class Gamepanel extends JPanel implements Runnable
 	// Do public when you want to access from other package
 	
 	public final int titleSize = originalTitleSize * scale; // 48*48 title
-	final int maxScreenColum = 16; // Width ("You can adjust as you like")
-	final int maxScreenRow = 12; // length ("You can adjust as you like")
-	final int screenWidth = titleSize * maxScreenColum; //  867 Pixel
-	final int screenHeight = titleSize * maxScreenRow; // 586 Pixel
+	public final int maxScreenColum = 16; // Width ("You can adjust as you like")
+	public final int maxScreenRow = 12; // length ("You can adjust as you like")
+	public final int screenWidth = titleSize * maxScreenColum; //  867 Pixel
+	public final int screenHeight = titleSize * maxScreenRow; // 586 Pixel
 	
 	// This is FPS section
 	
 	int Fps = 60;
 	
+	TileManager tileM = new TileManager(this);
+	
 	KeyHandle KeyH = new KeyHandle();
 	Thread GameThread;
 	Player player = new Player(this, KeyH);
 	
-	//Player default position
-	int playerX = 100;
-	int playerY = 100;
-	int playerSpeed = 4; // 4 means 4 Pixels
+//	layer default position
+//	int playerX = 100;
+//	int playerY = 100;
+//	int playerSpeed = 4; 4 means 4 Pixels
 	
 	public Gamepanel() 
 	{
@@ -177,6 +180,8 @@ public class Gamepanel extends JPanel implements Runnable
 //		g2.setColor(Color.white);
 //		
 //		g2.fillRect(playerX, playerY, titleSize, titleSize);
+		
+		tileM.draw(g2);
 		
 		player.draw(g2);
 		

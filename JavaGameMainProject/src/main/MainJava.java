@@ -11,7 +11,7 @@ public class MainJava{
 		JFrame window = new JFrame(); // JFrame name for window
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
-		window.setTitle("2D Adventure");
+		window.setTitle("My indie Adventure");
 		
 		Gamepanel gamePanel = new Gamepanel();// This is call function module of GamePanel
 		window.add(gamePanel);
